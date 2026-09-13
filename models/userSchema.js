@@ -4,20 +4,20 @@ const {Schema}=mongoose
 
 const userSchema=new Schema ({
     Fullname:{
-        type:"string",
+        type:String,
         required:true
     },
     email:{
-        type:"string",
+        type:String,
          required:true,
          ///unique:true
     },
     password:{
-        type:"string",
+        type:String,
          required:true
     },
     terms:{
-        type:'Boolean', 
+        type:Boolean, 
         required:true
     },
    role:{
