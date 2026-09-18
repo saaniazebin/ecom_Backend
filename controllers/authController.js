@@ -57,7 +57,7 @@ let registrationController = async (req, res) => {
 
     ///TO SAVE DATABAGE//
     const user = new User({
-        Fullname: Fullname,
+        fullname: fullname,
         email: email,
         password: hash,
         terms: terms
@@ -87,30 +87,35 @@ let registrationController = async (req, res) => {
 //////LOGINCONTROLLER/////
 
 
+
 let loginController = async (req, res) => {
     let { email, password } = req.body
+
+    if (!password || !email) {
+        return res.status(400).json({
+            success: "false",
+            message: "Give the above information to login"
+        })
+    }
 
     let existingUser = await User.findOne({ email: email })
 
     if (!existingUser) {
         return res.status(400).json({
             success: "false",
-            message: " user not found /Invalid credential"
+            message: "user not found / Invalid credential"
         })
     }
-    if (!password || !email) {
-        return res.status(400).json({
-            success: "false",
-            message: "Give the above imformation to registration"
-        })
-    }
+
     if (!emailRegex.test(email)) {
         return res.status(400).json({
             success: "false",
             message: "Give the valid email"
         })
     }
+
     let passCompare = bcrypt.compareSync(password, existingUser.password)
+
     if (passCompare) {
         let accessToken = jwt.sign({
             _id: existingUser._id,
@@ -120,7 +125,7 @@ let loginController = async (req, res) => {
             expiresIn: '7d'
         })
 
-        return res.status(400).json({
+        return res.status(200).json({
             success: "true",
             message: "Login successful",
             data: {
@@ -128,7 +133,8 @@ let loginController = async (req, res) => {
                 Fullname: existingUser.Fullname,
                 email: existingUser.email,
                 role: existingUser.role
-            },accessToken:accessToken
+            },
+            accessToken: accessToken
         })
     } else {
         return res.status(400).json({
@@ -139,9 +145,11 @@ let loginController = async (req, res) => {
 }
 
 
+
+
 ///VARIFYCONTROLLER////
 
-let verifyEmailController = async (res, req) => {
+let verifyEmailController = async (req, res) => {
     let { token } = req.params
     var decoded = jwt.verify(token, process.env.JWT_VERIFY_SCERET);
     await User.findIdByUpdate({ _id: decoded._id }, { isvarified: true })
@@ -181,7 +189,7 @@ let existingUser = await User.findOne({ email: email })
 }  
 
             ///RESETPASSWORD
- let resetpasswordController=async(req,res)=>{
+let resetpasswordController=async(req,res)=>{
 let {token}=req.params
 let {newpassword,confirmPassword}=req.body
 let decoded = jwt.verify(token, process.env.JWT_VERIFY_SCERET);

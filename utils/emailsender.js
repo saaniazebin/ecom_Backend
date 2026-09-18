@@ -45,5 +45,20 @@ async function forgotpasswordEmail(email, token){
   console.error("Error while sending mail:", err);
 }
 }
+/////CATAGORYEMAIL////
+async function catagoryEmail(name) {
+    try {
+        const info = await transporter.sendMail({
+            from: 'saaniazebin@gmail.com',
+            to: 'saaniazebin@gmail.com',
+            subject: "New Catagory Created",
+            html: `<b>New catagory created: ${name}</b>`,
+        })
 
-module.exports={verificationEmail,forgotpasswordEmail}
+        console.log("Message sent: %s", info.messageId)
+
+    } catch (err) {
+        console.error("Error while sending mail:", err)
+    }
+}
+module.exports={verificationEmail,forgotpasswordEmail,catagoryEmail}
