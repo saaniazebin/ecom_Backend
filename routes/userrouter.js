@@ -17,42 +17,11 @@ const {userController,createCatagory,getAllCatagory,updateCatagory,deleteCatagor
  *       200:
  *         description: Hello user
  */
-router.get('/product', userController)
+router.get('/allUser', userController)
 
 
-/**
- * @swagger
- * /create/catagory:
- *   post:
- *     summary: Create a new category
- *     tags: [Catagory]
- *     parameters:
- *       - in: query
- *         name: name
- *         required: true
- *         schema:
- *           type: string
- *         description: Category name
- *     responses:
- *       201:
- *         description: Category created successfully
- *       400:
- *         description: Category already exists
- */
-router.post('/create/catagory', createCatagory)
 
 
-/**
- * @swagger
- * /all/catagory:
- *   get:
- *     summary: Get all categories
- *     tags: [Catagory]
- *     responses:
- *       200:
- *         description: All categories
- */
-router.get('/all/catagory', getAllCatagory)
 
 
 /**

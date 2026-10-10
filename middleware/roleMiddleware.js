@@ -31,32 +31,32 @@ let adminMiddleware = (req, res, next) => {
 
 ///VENDOR_MIDDLEWARE
 
-///let vendorMiddleware = (req, res, next) => {
+let vendorMiddleware = (req, res, next) => {
 
-//     let authorizationToken = req.headers.authorization
+    let authorizationToken = req.headers.authorization
 
-//     if (!authorizationToken) {
-//         return res.status(401).json({
-//             success: false,
-//             message: "You are not loggedin"
-//         })
-//     }
+    if (!authorizationToken) {
+        return res.status(401).json({
+            success: false,
+            message: "You are not loggedin"
+        })
+    }
 
-//     let token = authorizationToken.split(" ")[1]
+    let token = authorizationToken.split(" ")[1]
 
-//     let decoded = jwt.verify(token, process.env.JWT_VERIFY_SCERET)
+    let decoded = jwt.verify(token, process.env.JWT_VERIFY_SCERET)
 
-//     if (decoded.role != "vendor" && decoded.role != "admin") {
-//         return res.status(401).json({
-//             success: false,
-//             message: "You are not authorized"
-//         })
-//     } else {
-//         next()
-//     }
+    if (decoded.role != "vendor" && decoded.role != "admin") {
+        return res.status(401).json({
+            success: false,
+            message: "You are not authorized"
+        })
+    } else {
+        next()
+    }
 
-//     console.log(decoded)
-// }
+    console.log(decoded)
+}
 
 
 ///User_Middleware
@@ -90,7 +90,7 @@ let userMiddleware = (req, res, next) => {
 
 module.exports = {
     adminMiddleware,
-    //vendorMiddleware,
+    vendorMiddleware,
     userMiddleware
 }
 
