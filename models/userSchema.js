@@ -3,7 +3,7 @@ const { type } = require("node:os")
 const {Schema}=mongoose
 
 const userSchema=new Schema ({
-    Fullname:{
+    fullname:{
         type:String,
         required:true
     },

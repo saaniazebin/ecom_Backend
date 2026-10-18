@@ -5,8 +5,8 @@ let getCategory=require("../utils/promise")
 
 //createCatagory
 let createCatagory= async(req,res)=>{
-    let {name,owner}=req.params
-    let existingName=await Cat.find({name:name.toLowerCase()})
+    let {name,owner}=req.body
+    let existingName=await Cat.findOne({name:name.toLowerCase()})
     if(existingName){
         return res.status(400).json({
             success:false,

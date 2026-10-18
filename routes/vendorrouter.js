@@ -1,17 +1,39 @@
 const express = require('express');
-const router = express.Router();
+const _ = express.Router();
 const vendorController=require("../controllers/vendorController")
 const {createCatagory,getAllCatagory, createSubCatagory,getAllSubCatagory,getAllCatagoryWiseSubCatagory,getAllOwnerWiseCatagory}=require("../controllers/vendorController")
+const {createProduct, getAllproductByOwnerController,getAllproductByCatagoryController,getAllproductBysunCatagoryController,getAllProduct}=require ("../controllers/productController.js")
+const multer  = require('multer')
+const crypto = require('crypto')
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../uploads')
+  },
+  filename: function (req, file, cb) {
+      let name=`eco-${Date.now()}` //jekono name bosano jabe
+      cb(null, name + '-' + file.originalname)
+    
+  }
+})
+
+const upload = multer({ storage: storage })
 
 
 
-router.post('/create/catagory', createCatagory)
-router.post('/create/subcatagory', createSubCatagory )
-router.get('/all/subcatagory', getAllSubCatagory)
-router.get('/all/catagory/:id/subcatagory', getAllCatagoryWiseSubCatagory)
-router.get('/all/user/:id/catagory', getAllOwnerWiseCatagory)
-router.get('/all/catagory', getAllCatagory)
+///Category And Subcategory
+_.post('/create/category', createCatagory)
+_.post('/create/subcategory', createSubCatagory )
+_.get('/all/subcategory', getAllSubCatagory)
+_.get('/all/category/:id/subcategory', getAllCatagoryWiseSubCatagory)
+_.get('/all/user/:id/category', getAllOwnerWiseCatagory)
+_.get('/all/category', getAllCatagory)
 
-            
 
-module.exports=router
+///Product 
+_.post("/create/product",upload.array("Image"),createProduct)
+_.get('/all/products', getAllProduct)
+_.get('/product/owner/:ownerId', getAllproductByOwnerController)
+_.get('/product/catagory/:catagoryId', getAllproductByCatagoryController)
+_.get('/product/subCatagory/:subCatagoryId', getAllproductBysunCatagoryController)
+module.exports=_
