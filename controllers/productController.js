@@ -1,6 +1,7 @@
 
 let Product = require("../models/productSchema")
 const { readSheet } =require ( 'read-excel-file/node')
+const writeExcelFile= require ('write-excel-file/node')
 const schema = {
   title: {
     column: 'title',
