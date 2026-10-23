@@ -6,8 +6,8 @@ const {Schema}=mongoose
 const productSchema=new Schema ({
     title:{
         type:String,
-        required:true,
-        unique:true
+        ///required:true,
+        // unique:true
     },
     description:{
         type:String
@@ -17,14 +17,14 @@ const productSchema=new Schema ({
     },
     sku:{
         type:String,
-        required:true,
-        unique:true
+        // required:true,
+        // unique:true
 
     },
     slug:{
          type:String,
-        required:true,
-        unique:true
+        // required:true,
+        // unique:true
 
     },
     price:{

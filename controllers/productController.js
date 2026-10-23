@@ -1,6 +1,55 @@
 
 let Product = require("../models/productSchema")
+const { readSheet } =require ( 'read-excel-file/node')
+const schema = {
+  title: {
+    column: 'title',
+    type: String
+  },
+  description: {
+    column: 'description',
+    type: String
+  },
+  shortDescription: {
+    column: 'shortDescription',
+    type: String
+  },
+//   sku: {
+//     column: 'sku',
+//     type: String
+//   },
+//   slug: {
+//     column: 'slug',
+//     type: String
+//   },
+  price: {
+    column: 'price',
+    type: Number
+  },
+  discountPrice: {
+    column: 'discountPrice',
+    type: Number
+  },
+  stock: {
+    column: 'stock',
+    type: Number
+  },
+  status: {
+    column: 'status',
+    type: String
+  },
+  brand: {
+    column: 'brand',
+    type: String
+  },
+  image: {
+    column: 'image',
+    type: String
+  }
+}
 
+
+//createProduct
 let createProduct = async (req, res) => {
     let { title, description, shortDescription, price, brand, stock, discountPrice, catagory, subCatagory,isMain ,owner} = req.body
 
@@ -129,4 +178,45 @@ let getAllproductBysunCatagoryController=async(req,res)=>{
 
 }
 
-module.exports = { createProduct ,getAllproductByOwnerController,getAllproductByCatagoryController,getAllproductBysunCatagoryController,getAllProduct}
+///bulkProductUploadController
+const bulkProductUploadController = async (req, res) => {
+    console.log("hello",req.file)
+     try {
+   
+     const { objects, errors } = await readSheet(req.file.path, { schema })
+
+     // console.log(" errors ", errors)
+     // console.log(" objects ", objects)
+
+
+
+    const products = objects.map((product) => ({
+    ...product,
+     slug : product.title.toLowerCase().split(" ").join("-"),
+     sku : `eco-${product.title.substring(0,4)}-${Date.now()}`,
+    image: [
+        {
+            url: product.image,
+            isMain: true
+        }
+    ]
+}))
+
+       await Product.insertMany(products)
+
+         res.status(201).json({
+        success: true,
+        message: "Product upload done"
+    })    
+       
+   
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
+
+module.exports = { createProduct ,getAllproductByOwnerController,getAllproductByCatagoryController,getAllproductBysunCatagoryController,getAllProduct,bulkProductUploadController}

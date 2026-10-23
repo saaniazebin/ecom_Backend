@@ -18,7 +18,7 @@ let createCatagory= async(req,res)=>{
         owner:owner
     })
    await cat.save()
-   await catagoryEmail(name)
+   //await catagoryEmail(name)
      return res.status(201).json({
         success:true,
         message:'Catagory created'
@@ -41,16 +41,16 @@ let getAllCatagory=async (req,res)=>{
 
           ////createSubcatagory
 let createSubCatagory=async(req,res)=>{
-        let {name, parentCatagory}=req.params
+        let {name, parentCatagory}=req.body ///params thakar kotha
 
-     let existingName=await SubCat.find({name:name.toLowerCase()})
+     let existingName=await SubCat.findOne({name:name.toLowerCase()})
     if(existingName){
         return res.status(400).json({
             success:false,
             message:'Sub Catagory already exist'
         })
     }
-    let subCat=new SubCat({
+    let subCat=new subCat({
         name:name.toLowerCase(),
          parentCatagory: parentCatagory 
     })
@@ -58,8 +58,8 @@ let createSubCatagory=async(req,res)=>{
     let catUpdate=await Cat.findByIdAndUpdate({_id:parentCatagory},
         {$push:{SubCatagory:subCat._id}}
     )
-   await SubCat.save()
-   await catagoryEmail(name)
+   await subCat.save()
+   ///await catagoryEmail(name)
      return res.status(201).json({
         success:true,
         message:'Sub Catagory created'
