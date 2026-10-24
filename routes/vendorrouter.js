@@ -2,7 +2,7 @@ const express = require('express');
 const _ = express.Router();
 const vendorController=require("../controllers/vendorController")
 const {createCatagory,getAllCatagory, createSubCatagory,getAllSubCatagory,getAllCatagoryWiseSubCatagory,getAllOwnerWiseCatagory}=require("../controllers/vendorController")
-const {createProduct, getAllproductByOwnerController,getAllproductByCatagoryController,getAllproductBysunCatagoryController,getAllProduct,bulkProductUploadController}=require ("../controllers/productController.js")
+const {createProduct, getAllproductByOwnerController,getAllproductByCatagoryController,getAllproductBysunCatagoryController,getAllProduct,bulkProductUploadController,bulkProductDownloadUploadController}=require ("../controllers/productController.js")
 const multer = require('multer')
 
 const storage = multer.diskStorage({
@@ -35,4 +35,5 @@ _.get('/product/owner/:ownerId', getAllproductByOwnerController)
 _.get('/product/catagory/:catagoryId', getAllproductByCatagoryController)
 _.get('/product/subCatagory/:subCatagoryId', getAllproductBysunCatagoryController)
 _.post("/bulk/product",upload.single("file"),bulkProductUploadController)
+_.post("/bulk/product/download",upload.single("file"),bulkProductDownloadUploadController)
 module.exports=_

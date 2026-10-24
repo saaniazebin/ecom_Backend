@@ -1,7 +1,7 @@
 
 let Product = require("../models/productSchema")
 const { readSheet } =require ( 'read-excel-file/node')
-const writeExcelFile= require ('write-excel-file/node')
+const writeExcelFile= require ('write-excel-file/node' )
 const schema = {
   title: {
     column: 'title',
@@ -220,4 +220,37 @@ const bulkProductUploadController = async (req, res) => {
 }
 
 
-module.exports = { createProduct ,getAllproductByOwnerController,getAllproductByCatagoryController,getAllproductBysunCatagoryController,getAllProduct,bulkProductUploadController}
+////bulkProductDownloadUploadController
+const bulkProductDownloadUploadController=async(req,res)=>{
+     const products = await Product.find()
+
+    const columns = [
+        { column: 'Title', type: String, value: product => product.title },
+        { column: 'Description', type: String, value: product => product.description },
+        { column: 'Short Description', type: String, value: product => product.shortDescription },
+        { column: 'SKU', type: String, value: product => product.sku },
+        { column: 'Slug', type: String, value: product => product.slug },
+        { column: 'Price', type: Number, value: product => product.price },
+        { column: 'Discount Price', type: Number, value: product => product.discountPrice },
+        { column: 'Stock', type: Number, value: product => product.stock },
+        { column: 'Status', type: String, value: product => product.status },
+        { column: 'Brand', type: String, value: product => product.brand },
+        { column: 'Image', type: String, value: product => JSON.stringify(product.image || []) }
+    ]
+
+    const data = products
+
+    await writeExcelFile([
+        {
+            sheet: 'Products',
+            data: data,
+            columns: columns,
+            stickyRowsCount: 1
+        }
+    ]).toFile('products.xlsx')
+
+    res.download('products.xlsx')
+
+}
+
+module.exports = { createProduct ,getAllproductByOwnerController,getAllproductByCatagoryController,getAllproductBysunCatagoryController,getAllProduct,bulkProductUploadController,bulkProductDownloadUploadController}
